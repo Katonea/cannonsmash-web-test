@@ -46,17 +46,21 @@
       return b;
     }
 
-    // 건너뛰기는 보상 없음. 보상형이 실패로 돌아가는 길도 눌러 봐야 한다.
-    row.appendChild(button("건너뛰기 (보상 없음)", false));
-    row.appendChild(button("끝까지 봄 (보상 받음)", true));
+    // 보상형만 버튼을 준다. 건너뛰기는 보상 없음 -- 실패로 돌아가는 길도
+    // 눌러 봐야 한다. 전면은 강제 5초라 버튼이 없다(Ads.jslib 규격).
+    var rewarded = kind === "rewarded";
+    if (rewarded) {
+      row.appendChild(button("건너뛰기 (보상 없음)", false));
+      row.appendChild(button("끝까지 봄 (보상 받음)", true));
+    }
 
     box.appendChild(title);
     box.appendChild(clock);
     box.appendChild(row);
     document.body.appendChild(box);
 
-    // 3초 뒤 저절로 끝난다 -- 아무것도 안 눌렀을 때의 진짜 광고 흐름이다.
-    var left = 3;
+    // 시간이 다 되면 저절로 끝난다 -- 아무것도 안 눌렀을 때의 광고 흐름이다.
+    var left = rewarded ? 3 : 5;
     clock.textContent = left;
     timer = setInterval(function () {
       left -= 1;
